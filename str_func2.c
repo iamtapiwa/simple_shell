@@ -20,7 +20,7 @@ char *_strchr(char *str, char c)
 	for (i = 0; str[i]; i++)
 	{
 		if (str[i] == c)
-			return (s + i);
+			return (str + i);
 	}
 
 	return (NULL);
