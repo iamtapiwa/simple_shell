@@ -85,6 +85,9 @@ void free_alias_list(alias_t *head);
 list_t *add_node_end(list_t **head, char *dir);
 void free_list(list_t *head);
 
+/* Environments */
+char **_getenv(const char *var);
+
 /* Error Handling */
 int create_error(char **args, int err);
 char *error_env(char **args);
