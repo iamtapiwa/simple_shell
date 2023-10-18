@@ -17,7 +17,7 @@ int _strlen(const char *str)
 
 	if (!str)
 		return (len);
-	for (len = 0; s[len]; len++)
+	for (len = 0; str[len]; len++)
 		;
 	return (len);
 }
