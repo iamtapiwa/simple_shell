@@ -17,15 +17,15 @@ int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front);
  */
 int shellby_env(char **args, char __attribute__((__unused__)) **front)
 {
-	int index;
+	int i;
 	char nc = '\n';
 
-	if (!environ)
+	if (!env)
 		return (-1);
 
-	for (index = 0; environ[index]; index++)
+	for (i = 0; env[i]; i++)
 	{
-		write(STDOUT_FILENO, environ[index], _strlen(environ[index]));
+		write(STDOUT_FILENO, env[i], _strlen(env[i]));
 		write(STDOUT_FILENO, &nc, 1);
 	}
 
@@ -45,9 +45,9 @@ int shellby_env(char **args, char __attribute__((__unused__)) **front)
  */
 int shellby_setenv(char **args, char __attribute__((__unused__)) **front)
 {
-	char **env_var = NULL, **new_environ, *new_value;
+	char **env_var = NULL, **new_env, *new_value;
 	size_t size;
-	int index;
+	int i;
 
 	if (!args[0] || !args[1])
 		return (create_error(args, -1));
@@ -66,23 +66,23 @@ int shellby_setenv(char **args, char __attribute__((__unused__)) **front)
 		*env_var = new_value;
 		return (0);
 	}
-	for (size = 0; environ[size]; size++)
+	for (size = 0; env[size]; size++)
 		;
 
-	new_environ = malloc(sizeof(char *) * (size + 2));
-	if (!new_environ)
+	new_env = malloc(sizeof(char *) * (size + 2));
+	if (!new_env)
 	{
 		free(new_value);
 		return (create_error(args, -1));
 	}
 
-	for (index = 0; environ[index]; index++)
-		new_environ[index] = environ[index];
+	for (i = 0; env[i]; i++)
+		new_env[i] = env[i];
 
-	free(environ);
-	environ = new_environ;
-	environ[index] = new_value;
-	environ[index + 1] = NULL;
+	free(env);
+	env = new_env;
+	env[i] = new_value;
+	env[i + 1] = NULL;
 
 	return (0);
 }
@@ -108,26 +108,26 @@ int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front)
 	if (!env_var)
 		return (0);
 
-	for (size = 0; environ[size]; size++)
+	for (size = 0; env[size]; size++)
 		;
 
 	new_environ = malloc(sizeof(char *) * size);
 	if (!new_environ)
 		return (create_error(args, -1));
 
-	for (index = 0, index2 = 0; environ[index]; index++)
+	for (index = 0, index2 = 0; env[index]; index++)
 	{
-		if (*env_var == environ[index])
+		if (*env_var == env[index])
 		{
 			free(*env_var);
 			continue;
 		}
-		new_environ[index2] = environ[index];
+		new_environ[index2] = env[index];
 		index2++;
 	}
-	free(environ);
-	environ = new_environ;
-	environ[size - 1] = NULL;
+	free(env);
+	env = new_environ;
+	env[size - 1] = NULL;
 
 	return (0);
 }
